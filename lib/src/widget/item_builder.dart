@@ -143,6 +143,11 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
       aspectRatio: item.imageRawSize.width / item.imageRawSize.height,
       child: image,
     );
+  } else if (!konwSized) {
+    image = AspectRatio(
+      aspectRatio: 1.0,
+      child: image,
+    );
   }
 
   return Column(
