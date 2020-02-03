@@ -80,62 +80,75 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
   );
 }
 
-Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index) {
+Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
+    {bool konwSized = true}) {
   final double fontSize = 12.0;
+
+  Widget image = Stack(
+    children: <Widget>[
+      ExtendedImage.network(
+        item.imageUrl,
+        shape: BoxShape.rectangle,
+        clearMemoryCacheWhenDispose: true,
+        border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+        loadStateChanged: (value) {
+          if (value.extendedImageLoadState == LoadState.loading) {
+            return Container(
+              alignment: Alignment.center,
+              color: Colors.grey.withOpacity(0.8),
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+                valueColor: AlwaysStoppedAnimation(Theme.of(c).primaryColor),
+              ),
+            );
+          } else if (value.extendedImageLoadState == LoadState.completed) {
+            item.imageRawSize = Size(
+                value.extendedImageInfo.image.width.toDouble(),
+                value.extendedImageInfo.image.height.toDouble());
+          }
+          return null;
+        },
+      ),
+      Positioned(
+        top: 5.0,
+        right: 5.0,
+        child: Container(
+          padding: EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.6),
+            border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.0),
+            ),
+          ),
+          child: Text(
+            "${index + 1}",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: fontSize, color: Colors.white),
+          ),
+        ),
+      )
+    ],
+  );
+  if (konwSized) {
+    image = AspectRatio(
+      aspectRatio: item.imageSize.width / item.imageSize.height,
+      child: image,
+    );
+  } else if (item.imageRawSize != null) {
+    image = AspectRatio(
+      aspectRatio: item.imageRawSize.width / item.imageRawSize.height,
+      child: image,
+    );
+  }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      AspectRatio(
-        aspectRatio: item.imageSize.width / item.imageSize.height,
-        child: Stack(
-          children: <Widget>[
-            ExtendedImage.network(
-              item.imageUrl,
-              shape: BoxShape.rectangle,
-              clearMemoryCacheWhenDispose: true,
-              border:
-                  Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-              loadStateChanged: (value) {
-                if (value.extendedImageLoadState == LoadState.loading) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: Colors.grey.withOpacity(0.8),
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor:
-                          AlwaysStoppedAnimation(Theme.of(c).primaryColor),
-                    ),
-                  );
-                }
-                return null;
-              },
-            ),
-            Positioned(
-              top: 5.0,
-              right: 5.0,
-              child: Container(
-                padding: EdgeInsets.all(3.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.6),
-                  border: Border.all(
-                      color: Colors.grey.withOpacity(0.4), width: 1.0),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                ),
-                child: Text(
-                  "${index + 1}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: fontSize, color: Colors.white),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+      image,
       SizedBox(
         height: 5.0,
       ),
