@@ -96,7 +96,7 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
         ),
         loadStateChanged: (value) {
           if (value.extendedImageLoadState == LoadState.loading) {
-            return Container(
+            Widget loadingWidget = Container(
               alignment: Alignment.center,
               color: Colors.grey.withOpacity(0.8),
               child: CircularProgressIndicator(
@@ -104,6 +104,13 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
                 valueColor: AlwaysStoppedAnimation(Theme.of(c).primaryColor),
               ),
             );
+            if (!konwSized) {
+              loadingWidget = AspectRatio(
+                aspectRatio: 1.0,
+                child: loadingWidget,
+              );
+            }
+            return loadingWidget;
           } else if (value.extendedImageLoadState == LoadState.completed) {
             item.imageRawSize = Size(
                 value.extendedImageInfo.image.width.toDouble(),
@@ -141,11 +148,6 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
   } else if (item.imageRawSize != null) {
     image = AspectRatio(
       aspectRatio: item.imageRawSize.width / item.imageRawSize.height,
-      child: image,
-    );
-  } else if (!konwSized) {
-    image = AspectRatio(
-      aspectRatio: 1.0,
       child: image,
     );
   }
