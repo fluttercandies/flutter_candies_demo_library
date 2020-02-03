@@ -105,6 +105,7 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
               ),
             );
             if (!konwSized) {
+              //todo: not work in web
               loadingWidget = AspectRatio(
                 aspectRatio: 1.0,
                 child: loadingWidget,
