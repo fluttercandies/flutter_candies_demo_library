@@ -1,22 +1,41 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_candies_demo_library/src/data/tu_chong_repository.dart';
 import 'package:flutter_candies_demo_library/src/data/tu_chong_source.dart';
+import 'package:flutter_candies_demo_library/src/utils/screen_util.dart';
 import 'package:like_button/like_button.dart';
 
 Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
   return Container(
-    height: 200.0,
+    height: ScreenUtil.instance.setWidth(kIsWeb ? 400.0 : 200.0),
     child: Stack(
       children: <Widget>[
         Positioned(
-          child: ExtendedImage.network(
-            item.imageUrl,
-            fit: BoxFit.fill,
-            width: double.infinity,
-            //height: 200.0,
-            height: double.infinity,
-          ),
+          child: kIsWeb
+              ? ListView.builder(
+                  itemBuilder: (c, index) {
+                    return ExtendedImage.network(
+                      item.images[index].imageUrl,
+                      fit: BoxFit.cover,
+                      width: ScreenUtil.instance
+                          .setWidth(kIsWeb ? 400.0 : double.infinity),
+                      height:
+                          ScreenUtil.instance.setWidth(kIsWeb ? 400.0 : 200.0),
+                      clearMemoryCacheWhenDispose: true,
+                    );
+                  },
+                  scrollDirection: Axis.horizontal,
+                  itemCount: item.images.length,
+                )
+              : ExtendedImage.network(
+                  item.imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  //height: 200.0,
+                  height: double.infinity,
+                  clearMemoryCacheWhenDispose: true,
+                ),
         ),
         Positioned(
           left: 0.0,
