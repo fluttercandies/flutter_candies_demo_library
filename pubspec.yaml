@@ -14,7 +14,7 @@ dependencies:
   http_client_helper: any  
   extended_image: any  
   pull_to_refresh_notification: any
-  extended_text_library: any
+  extended_text: any
   like_button: any
   
   image_picker_saver: 0.3.0

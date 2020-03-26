@@ -139,6 +139,7 @@ class CropImage extends StatelessWidget {
                     .map<PicSwiperItem>(
                         (f) => PicSwiperItem(picUrl: f.imageUrl, des: f.title))
                     .toList(),
+                'tuChongItem': tuChongItem,
               });
         },
       );

@@ -188,12 +188,15 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
   );
 }
 
-Widget buildTagsWidget(TuChongItem item) {
+Widget buildTagsWidget(
+  TuChongItem item, {
+  int maxNum = 6,
+}) {
   final fontSize = 12.0;
   return Wrap(
       runSpacing: 5.0,
       spacing: 5.0,
-      children: item.tags.map<Widget>((tag) {
+      children: item.tags.take(maxNum).map<Widget>((tag) {
         final color = item.tagColors[item.tags.indexOf(tag)];
         return Container(
           padding: EdgeInsets.all(3.0),

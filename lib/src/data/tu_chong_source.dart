@@ -295,15 +295,15 @@ class TuChongItem {
     final tagColors = List<Color>();
     List<String> tags = jsonRes['tags'] is List ? [] : null;
     if (tags != null) {
-      final int maxNum = 6;
+      //final int maxNum = 6;
       for (var tagsItem in tags == null ? [] : jsonRes['tags']) {
         tags.add(tagsItem);
         tagColors.add(Color.fromARGB(255, Random.secure().nextInt(255),
             Random.secure().nextInt(255), Random.secure().nextInt(255)));
-        if (tags.length == maxNum) break;
+        //if (tags.length == maxNum) break;
       }
     }
-
+  
     return TuChongItem(
       authorId: jsonRes['author_id'],
       collected: jsonRes['collected'],
@@ -444,7 +444,7 @@ class Site {
       isBindEverphoto: jsonRes['is_bind_everphoto'],
       isFollowing: jsonRes['is_following'],
       name: jsonRes['name'],
-      siteId: jsonRes['site_id'],
+      siteId: jsonRes['site_id'].toString(),
       type: jsonRes['type'],
       url: jsonRes['url'],
       verificationList: verificationList,
