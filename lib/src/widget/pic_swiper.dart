@@ -277,6 +277,8 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                   _imageDetailY = 0;
                   rebuildDetail.sink.add(_imageDetailY);
                 }
+                _showSwiper = true;
+                rebuildSwiper.add(_showSwiper);
               },
               scrollDirection: Axis.horizontal,
               physics: BouncingScrollPhysics(),
