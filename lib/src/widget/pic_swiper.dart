@@ -14,12 +14,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:ff_annotation_route/ff_annotation_route.dart';
 import 'item_builder.dart';
 
 const String attachContent =
     "[love]Extended text help you to build rich text quickly. any special text you will have with extended text.It's my pleasure to invite you to join \$FlutterCandies\$ if you want to improve flutter .[love] if you meet any problem, please let me konw @zmtzawqlp .[sun_glasses]";
 
+@FFRoute(
+    name: "fluttercandies://picswiper",
+    routeName: "PicSwiper",
+    argumentNames: ["index", "pics", "tuChongItem"],
+    showStatusBar: false,
+    pageRouteType: PageRouteType.transparent)
 class PicSwiper extends StatefulWidget {
   final int index;
   final List<PicSwiperItem> pics;
