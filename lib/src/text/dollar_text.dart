@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class DollarText extends SpecialText {
-  static const String flag = "\$";
+  static const String flag = '\$';
   final int start;
   DollarText(TextStyle textStyle, SpecialTextGestureTapCallback onTap,
       {this.start})
@@ -11,7 +11,7 @@ class DollarText extends SpecialText {
 
   @override
   InlineSpan finishText() {
-    final String text = getContent();
+    final text = getContent();
 
     return SpecialTextSpan(
         text: text,
@@ -29,14 +29,14 @@ class DollarText extends SpecialText {
 }
 
 List<String> dollarList = <String>[
-  "\$Dota2\$",
-  "\$Dota2 Ti9\$",
-  "\$CN dota best dota\$",
-  "\$Flutter\$",
-  "\$CN dev best dev\$",
-  "\$UWP\$",
-  "\$Nevermore\$",
-  "\$FlutterCandies\$",
-  "\$ExtendedImage\$",
-  "\$ExtendedText\$",
+  '\$Dota2\$',
+  '\$Dota2 Ti9\$',
+  '\$CN dota best dota\$',
+  '\$Flutter\$',
+  '\$CN dev best dev\$',
+  '\$UWP\$',
+  '\$Nevermore\$',
+  '\$FlutterCandies\$',
+  '\$ExtendedImage\$',
+  '\$ExtendedText\$',
 ];

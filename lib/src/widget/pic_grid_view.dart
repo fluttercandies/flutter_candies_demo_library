@@ -15,9 +15,9 @@ class PicGridView extends StatelessWidget {
     if (!tuChongItem.hasImage) return Container();
 
     Widget widget = LayoutBuilder(builder: (c, b) {
-      final double margin = ScreenUtil.instance.setWidth(22);
+      final margin = ScreenUtil.instance.setWidth(22);
       var size = b.maxWidth;
-      int rowCount = 3;
+      var rowCount = 3;
       //single image
       if (tuChongItem.images.length == 1) {
         return Padding(

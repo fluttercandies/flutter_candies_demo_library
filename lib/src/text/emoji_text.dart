@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 ///emoji/image text
 class EmojiText extends SpecialText {
-  static const String flag = "[";
+  static const String flag = '[';
   final int start;
   EmojiText(TextStyle textStyle, {this.start})
-      : super(EmojiText.flag, "]", textStyle);
+      : super(EmojiText.flag, ']', textStyle);
 
   @override
   InlineSpan finishText() {
@@ -18,7 +18,7 @@ class EmojiText extends SpecialText {
     if (EmojiUitl.instance.emojiMap.containsKey(key) && !kIsWeb) {
       //fontsize id define image height
       //size = 30.0/26.0 * fontSize
-      final double size = 20.0;
+      final size = 20.0;
 
       ///fontSize 26 and text height =30.0
       //final double fontSize = 26.0;
@@ -40,20 +40,17 @@ class EmojiText extends SpecialText {
 }
 
 class EmojiUitl {
-  final Map<String, String> _emojiMap = new Map<String, String>();
+  final Map<String, String> _emojiMap = <String, String>{};
 
   Map<String, String> get emojiMap => _emojiMap;
 
-  final String _emojiFilePath = "assets";
+  final String _emojiFilePath = 'assets';
 
   static EmojiUitl _instance;
-  static EmojiUitl get instance {
-    if (_instance == null) _instance = new EmojiUitl._();
-    return _instance;
-  }
+  static EmojiUitl get instance => _instance ??= EmojiUitl._();
 
   EmojiUitl._() {
-    _emojiMap["[love]"] = "$_emojiFilePath/love.png";
-    _emojiMap["[sun_glasses]"] = "$_emojiFilePath/sun_glasses.png";
+    _emojiMap['[love]'] = '$_emojiFilePath/love.png';
+    _emojiMap['[sun_glasses]'] = '$_emojiFilePath/sun_glasses.png';
   }
 }

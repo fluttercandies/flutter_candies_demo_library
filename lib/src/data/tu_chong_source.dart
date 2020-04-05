@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ImageItem {
   String get imageUrl {
-    return "https://photo.tuchong.com/$userId/f/$imgId.jpg";
+    return 'https://photo.tuchong.com/$userId/f/$imgId.jpg';
   }
 
   final String description;
@@ -91,7 +91,7 @@ class TuChongSource {
 
   factory TuChongSource.fromJson(jsonRes) {
     if (jsonRes == null) return null;
-    List<TuChongItem> feedList = jsonRes['feedList'] is List ? [] : null;
+    final feedList = jsonRes['feedList'] is List ? <TuChongItem>[] : null;
     if (feedList != null) {
       for (var item in jsonRes['feedList']) {
         if (item != null) {
@@ -162,7 +162,7 @@ class TuChongItem {
   final bool update;
   final String url;
   final int views;
-  final List<Color> tagColors = List<Color>();
+  final List<Color> tagColors = <Color>[];
 
   TuChongItem({
     this.authorId,
@@ -205,7 +205,7 @@ class TuChongItem {
   });
 
   bool get hasImage {
-    return images != null && images.length > 0;
+    return images != null && images.isNotEmpty;
   }
 
   Size imageRawSize;
@@ -216,8 +216,8 @@ class TuChongItem {
   }
 
   String get imageUrl {
-    if (!hasImage) return "";
-    return "https://photo.tuchong.com/${images[0].userId}/f/${images[0].imgId}.jpg";
+    if (!hasImage) return '';
+    return 'https://photo.tuchong.com/${images[0].userId}/f/${images[0].imgId}.jpg';
   }
 
   String get avatarUrl => site.icon;
@@ -236,8 +236,8 @@ class TuChongItem {
 
   factory TuChongItem.fromJson(jsonRes) {
     if (jsonRes == null) return null;
-    List<Object> commentListPrefix =
-        jsonRes['comment_list_prefix'] is List ? [] : null;
+    final commentListPrefix =
+        jsonRes['comment_list_prefix'] is List ? <Object>[] : null;
     if (commentListPrefix != null) {
       for (var item in jsonRes['comment_list_prefix']) {
         if (item != null) {
@@ -246,7 +246,7 @@ class TuChongItem {
       }
     }
 
-    List<String> eventTags = jsonRes['event_tags'] is List ? [] : null;
+    final eventTags = jsonRes['event_tags'] is List ? <String>[] : null;
     if (eventTags != null) {
       for (var item in jsonRes['event_tags']) {
         if (item != null) {
@@ -255,8 +255,8 @@ class TuChongItem {
       }
     }
 
-    List<Object> favoriteListPrefix =
-        jsonRes['favorite_list_prefix'] is List ? [] : null;
+    final favoriteListPrefix =
+        jsonRes['favorite_list_prefix'] is List ? <Object>[] : null;
     if (favoriteListPrefix != null) {
       for (var item in jsonRes['favorite_list_prefix']) {
         if (item != null) {
@@ -265,7 +265,7 @@ class TuChongItem {
       }
     }
 
-    List<ImageItem> images = jsonRes['images'] is List ? [] : null;
+    final images = jsonRes['images'] is List ? <ImageItem>[] : null;
     if (images != null) {
       for (var item in jsonRes['images']) {
         if (item != null) {
@@ -274,8 +274,8 @@ class TuChongItem {
       }
     }
 
-    List<Object> rewardListPrefix =
-        jsonRes['reward_list_prefix'] is List ? [] : null;
+    final rewardListPrefix =
+        jsonRes['reward_list_prefix'] is List ? <Object>[] : null;
     if (rewardListPrefix != null) {
       for (var item in jsonRes['reward_list_prefix']) {
         if (item != null) {
@@ -284,7 +284,7 @@ class TuChongItem {
       }
     }
 
-    List<Object> sites = jsonRes['sites'] is List ? [] : null;
+    final sites = jsonRes['sites'] is List ? <Object>[] : null;
     if (sites != null) {
       for (var item in jsonRes['sites']) {
         if (item != null) {
@@ -292,8 +292,8 @@ class TuChongItem {
         }
       }
     }
-    final tagColors = List<Color>();
-    List<String> tags = jsonRes['tags'] is List ? [] : null;
+    final tagColors = <Color>[];
+    final tags = jsonRes['tags'] is List ? <String>[] : null;
     if (tags != null) {
       //final int maxNum = 6;
       for (var tagsItem in tags == null ? [] : jsonRes['tags']) {
@@ -425,8 +425,8 @@ class Site {
 
   factory Site.fromJson(jsonRes) {
     if (jsonRes == null) return null;
-    List<VerificationList> verificationList =
-        jsonRes['verification_list'] is List ? [] : null;
+    final verificationList =
+        jsonRes['verification_list'] is List ? <VerificationList>[] : null;
     if (verificationList != null) {
       for (var item in jsonRes['verification_list']) {
         if (item != null) {

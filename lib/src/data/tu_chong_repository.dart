@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_candies_demo_library/src/data/mock_data.dart';
 import 'package:flutter_candies_demo_library/src/data/tu_chong_source.dart';
@@ -38,15 +37,15 @@ class TuChongRepository extends LoadingMoreBase<TuChongItem> {
 
   @override
   Future<bool> loadData([bool isloadMoreAction = false]) async {
-    String url = "";
-    if (this.length == 0) {
-      url = "https://api.tuchong.com/feed-app";
+    var url = '';
+    if (isEmpty) {
+      url = 'https://api.tuchong.com/feed-app';
     } else {
-      int lastPostId = this[this.length - 1].postId;
+      final lastPostId = this[length - 1].postId;
       url =
-          "https://api.tuchong.com/feed-app?post_id=$lastPostId&page=$pageindex&type=loadmore";
+          'https://api.tuchong.com/feed-app?post_id=$lastPostId&page=$pageindex&type=loadmore';
     }
-    bool isSuccess = false;
+    var isSuccess = false;
     try {
       //to show loading more clearly, in your app,remove this
       await Future.delayed(Duration(milliseconds: 500));
@@ -56,19 +55,19 @@ class TuChongRepository extends LoadingMoreBase<TuChongItem> {
         feedList = TuChongSource.fromJson(json.decode(result.body)).feedList;
       } else {
         feedList = mockSource.feedList
-            .getRange(this.length, this.length + 20)
+            .getRange(length, length + 20)
             .toList();
       }
 
       if (pageindex == 1) {
-        this.clear();
+        clear();
       }
 
       for (var item in feedList) {
-        if (item.hasImage && !this.contains(item) && hasMore) this.add(item);
+        if (item.hasImage && !contains(item) && hasMore) add(item);
       }
 
-      _hasMore = feedList.length != 0;
+      _hasMore = feedList.isNotEmpty;
       pageindex++;
 //      this.clear();
 //      _hasMore=false;

@@ -71,16 +71,17 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
                     Widget result;
                     if (count == 0) {
                       result = Text(
-                        "love",
+                        'love',
                         style: TextStyle(color: color),
                       );
-                    } else
+                    } else {
                       result = Text(
                         count >= 1000
-                            ? (count / 1000.0).toStringAsFixed(1) + "k"
+                            ? (count / 1000.0).toStringAsFixed(1) + 'k'
                             : text,
                         style: TextStyle(color: color),
                       );
+                    }
                     return result;
                   },
                   likeCountAnimationType: item.favorites < 1000
@@ -101,7 +102,7 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
 
 Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
     {bool konwSized = true}) {
-  final double fontSize = 12.0;
+  final fontSize = 12.0;
 
   Widget image = Stack(
     children: <Widget>[
@@ -152,7 +153,7 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
             ),
           ),
           child: Text(
-            "${index + 1}",
+            '${index + 1}',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: fontSize, color: Colors.white),
           ),
@@ -238,7 +239,7 @@ Widget buildBottomWidget(TuChongItem item, {bool showAvatar = true}) {
                   return null;
                 }
                 return Image.asset(
-                  "assets/avatar.jpg",
+                  'assets/avatar.jpg',
                   package: 'flutter_candies_demo_library',
                 );
               },
@@ -275,14 +276,15 @@ Widget buildBottomWidget(TuChongItem item, {bool showAvatar = true}) {
           Widget result;
           if (count == 0) {
             result = Text(
-              "love",
+              'love',
               style: TextStyle(color: color, fontSize: fontSize),
             );
-          } else
+          } else {
             result = Text(
-              count >= 1000 ? (count / 1000.0).toStringAsFixed(1) + "k" : text,
+              count >= 1000 ? (count / 1000.0).toStringAsFixed(1) + 'k' : text,
               style: TextStyle(color: color, fontSize: fontSize),
             );
+          }
           return result;
         },
         likeCountAnimationType: item.favorites < 1000

@@ -8,7 +8,7 @@ import 'emoji_text.dart';
 class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
   /// whether show background for @somebody
   final bool showAtBackground;
-  MySpecialTextSpanBuilder({this.showAtBackground: false});
+  MySpecialTextSpanBuilder({this.showAtBackground= false});
 
   @override
   TextSpan build(String data, {TextStyle textStyle, onTap}) {
@@ -19,7 +19,7 @@ class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
   @override
   SpecialText createSpecialText(String flag,
       {TextStyle textStyle, SpecialTextGestureTapCallback onTap, int index}) {
-    if (flag == null || flag == "") return null;
+    if (flag == null || flag == '') return null;
 
     ///index is end index of start flag, so text start index should be index-(flag.length-1)
     if (isStart(flag, AtText.flag)) {

@@ -26,10 +26,10 @@ class CropImage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!tuChongItem.hasImage) return Container();
 
-    final double num300 = ScreenUtil.instance.setWidth(300);
-    final double num400 = ScreenUtil.instance.setWidth(400);
-    double height = num300;
-    double width = num400;
+    final  num300 = ScreenUtil.instance.setWidth(300);
+    final  num400 = ScreenUtil.instance.setWidth(400);
+    var height = num300;
+    var width = num400;
     final imageItem = tuChongItem.images[index];
     if (knowImageSize) {
       height = imageItem.height.toDouble();
@@ -93,7 +93,7 @@ class CropImage extends StatelessWidget {
               fit: StackFit.expand,
               children: <Widget>[
                 Image.asset(
-                  "assets/failed.jpg",
+                  'assets/failed.jpg',
                   fit: BoxFit.fill,
                 ),
                 Positioned(
@@ -101,7 +101,7 @@ class CropImage extends StatelessWidget {
                   left: 0.0,
                   right: 0.0,
                   child: Text(
-                    "load image failed, click to reload",
+                    'load image failed, click to reload',
                     textAlign: TextAlign.center,
                   ),
                 )
@@ -121,7 +121,7 @@ class CropImage extends StatelessWidget {
               color: Colors.grey.withOpacity(0.2),
               alignment: Alignment.center,
               child: Text(
-                "+${tuChongItem.images.length - 9}",
+                '+${tuChongItem.images.length - 9}',
                 style: TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             )
@@ -132,10 +132,10 @@ class CropImage extends StatelessWidget {
       widget = GestureDetector(
         child: widget,
         onTap: () {
-          Navigator.pushNamed(context, "fluttercandies://picswiper",
+          Navigator.pushNamed(context, 'fluttercandies://picswiper',
               arguments: {
-                "index": index,
-                "pics": tuChongItem.images
+                'index': index,
+                'pics': tuChongItem.images
                     .map<PicSwiperItem>(
                         (f) => PicSwiperItem(picUrl: f.imageUrl, des: f.title))
                     .toList(),
@@ -180,7 +180,7 @@ class CropImage extends StatelessWidget {
                   padding: EdgeInsets.all(2.0),
                   color: Colors.grey,
                   child: const Text(
-                    "long image",
+                    'long image',
                     style: TextStyle(color: Colors.white, fontSize: 10.0),
                   ),
                 ),
@@ -231,7 +231,7 @@ class CropImage extends StatelessWidget {
                   padding: EdgeInsets.all(2.0),
                   color: Colors.grey,
                   child: const Text(
-                    "long image",
+                    'long image',
                     style: TextStyle(color: Colors.white, fontSize: 10.0),
                   ),
                 ),

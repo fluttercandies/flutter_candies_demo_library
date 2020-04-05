@@ -5,6 +5,6 @@ class PicSwiperItem {
   final String des;
   PicSwiperItem({
     @required this.picUrl,
-    this.des = "",
+    this.des = '',
   });
 }

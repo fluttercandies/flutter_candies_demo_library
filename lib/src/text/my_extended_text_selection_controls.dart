@@ -32,23 +32,22 @@ class MyExtendedMaterialTextSelectionControls
 
     // The toolbar should appear below the TextField
     // when there is not enough space above the TextField to show it.
-    final TextSelectionPoint startTextSelectionPoint = endpoints[0];
-    final TextSelectionPoint endTextSelectionPoint =
-        (endpoints.length > 1) ? endpoints[1] : null;
-    final double x = (endTextSelectionPoint == null)
+    final startTextSelectionPoint = endpoints[0];
+    final endTextSelectionPoint = (endpoints.length > 1) ? endpoints[1] : null;
+    final x = (endTextSelectionPoint == null)
         ? startTextSelectionPoint.point.dx
         : (startTextSelectionPoint.point.dx + endTextSelectionPoint.point.dx) /
             2.0;
-    final double availableHeight = globalEditableRegion.top -
+    final availableHeight = globalEditableRegion.top -
         MediaQuery.of(context).padding.top -
         _kToolbarScreenPadding;
-    final double y = (availableHeight < _kToolbarHeight)
+    final y = (availableHeight < _kToolbarHeight)
         ? startTextSelectionPoint.point.dy +
             globalEditableRegion.height +
             _kToolbarHeight +
             _kToolbarScreenPadding
         : startTextSelectionPoint.point.dy - textLineHeight * 2.0;
-    final Offset preciseMidpoint = Offset(x, y);
+    final preciseMidpoint = Offset(x, y);
 
     return ConstrainedBox(
       constraints: BoxConstraints.tight(globalEditableRegion.size),
@@ -67,7 +66,7 @@ class MyExtendedMaterialTextSelectionControls
           handleLike: () {
             //mailto:<email address>?subject=<subject>&body=<body>, e.g.
             launch(
-                "mailto:zmtzawqlp@live.com?subject=extended_text_share&body=${delegate.textEditingValue.text}");
+                'mailto:zmtzawqlp@live.com?subject=extended_text_share&body=${delegate.textEditingValue.text}');
             delegate.hideToolbar();
             //clear selecction
             delegate.textEditingValue = delegate.textEditingValue.copyWith(
@@ -86,7 +85,7 @@ class MyExtendedMaterialTextSelectionControls
       width: _kHandleSize,
       height: _kHandleSize,
       child: Image.asset(
-        "assets/40.png",
+        'assets/40.png',
         package: 'flutter_candies_demo_library',
       ),
     );
@@ -132,28 +131,32 @@ class _TextSelectionToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> items = <Widget>[];
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
+    final items = <Widget>[];
+    final localizations = MaterialLocalizations.of(context);
 
-    if (handleCut != null)
+    if (handleCut != null) {
       items.add(FlatButton(
           child: Text(localizations.cutButtonLabel), onPressed: handleCut));
-    if (handleCopy != null)
+    }
+    if (handleCopy != null) {
       items.add(FlatButton(
           child: Text(localizations.copyButtonLabel), onPressed: handleCopy));
-    if (handlePaste != null)
+    }
+    if (handlePaste != null) {
       items.add(FlatButton(
         child: Text(localizations.pasteButtonLabel),
         onPressed: handlePaste,
       ));
-    if (handleSelectAll != null)
+    }
+    if (handleSelectAll != null) {
       items.add(FlatButton(
           child: Text(localizations.selectAllButtonLabel),
           onPressed: handleSelectAll));
+    }
 
-    if (handleLike != null)
+    if (handleLike != null) {
       items.add(FlatButton(child: Icon(Icons.favorite), onPressed: handleLike));
+    }
 
     // If there is no option available, build an empty widget.
     if (items.isEmpty) {

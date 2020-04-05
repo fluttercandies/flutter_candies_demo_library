@@ -18,12 +18,12 @@ import 'package:ff_annotation_route/ff_annotation_route.dart';
 import 'item_builder.dart';
 
 const String attachContent =
-    "[love]Extended text help you to build rich text quickly. any special text you will have with extended text.It's my pleasure to invite you to join \$FlutterCandies\$ if you want to improve flutter .[love] if you meet any problem, please let me konw @zmtzawqlp .[sun_glasses]";
+    '''[love]Extended text help you to build rich text quickly. any special text you will have with extended text.It's my pleasure to invite you to join \$FlutterCandies\$ if you want to improve flutter .[love] if you meet any problem, please let me konw @zmtzawqlp .[sun_glasses]''';
 
 @FFRoute(
-    name: "fluttercandies://picswiper",
-    routeName: "PicSwiper",
-    argumentNames: ["index", "pics", "tuChongItem"],
+    name: 'fluttercandies://picswiper',
+    routeName: 'PicSwiper',
+    argumentNames: ['index', 'pics', 'tuChongItem'],
     showStatusBar: false,
     pageRouteType: PageRouteType.transparent)
 class PicSwiper extends StatefulWidget {
@@ -43,7 +43,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
   final rebuildIndex = StreamController<int>.broadcast();
   final rebuildSwiper = StreamController<bool>.broadcast();
   final rebuildDetail = StreamController<double>.broadcast();
-  final detailKeys = Map<int, ImageDetailInfo>();
+  final detailKeys = <int, ImageDetailInfo>{};
   AnimationController _doubleClickAnimationController;
   AnimationController _slideEndAnimationController;
   Animation<double> _slideEndAnimation;
@@ -136,7 +136,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                     }
                   },
                   initGestureConfigHandler: (state) {
-                    double initialScale = 1.0;
+                    var initialScale = 1.0;
 
                     if (state.extendedImageInfo != null &&
                         state.extendedImageInfo.image != null) {
@@ -161,7 +161,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                     ///you can use define pointerDownPosition as you can,
                     ///default value is double tap pointer down postion.
                     final pointerDownPosition = state.pointerDownPosition;
-                    double begin = state.gestureDetails.totalScale;
+                    var begin = state.gestureDetails.totalScale;
                     double end;
 
                     //remove old
@@ -379,12 +379,12 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
         if (_imageDetailY != 0 && state.scale == 1) {
           if (!_slideEndAnimationController.isAnimating) {
 // get magnitude from gesture velocity
-            final double magnitude = details.velocity.pixelsPerSecond.distance;
+            final magnitude = details.velocity.pixelsPerSecond.distance;
 
             // do a significant magnitude
 
             if (doubleCompare(magnitude, minMagnitude) >= 0) {
-              final Offset direction =
+              final direction =
                   details.velocity.pixelsPerSecond / magnitude * 1000;
 
               _slideEndAnimation =
@@ -445,16 +445,16 @@ class MySwiperPlugin extends StatelessWidget {
                   width: 10.0,
                 ),
                 Text(
-                  "${data.data + 1}",
+                  '${data.data + 1}',
                 ),
                 Text(
-                  " / ${pics.length}",
+                  ' / ${pics.length}',
                 ),
                 SizedBox(
                   width: 10.0,
                 ),
                 Expanded(
-                    child: Text(pics[data.data].des ?? "",
+                    child: Text(pics[data.data].des ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 16.0, color: Colors.blue))),
@@ -467,7 +467,7 @@ class MySwiperPlugin extends StatelessWidget {
                           padding: EdgeInsets.only(right: 10.0),
                           alignment: Alignment.center,
                           child: Text(
-                            "Save",
+                            'Save',
                             style:
                                 TextStyle(fontSize: 16.0, color: Colors.blue),
                           ),
@@ -475,7 +475,7 @@ class MySwiperPlugin extends StatelessWidget {
                         onTap: () {
                           saveNetworkImageToPhoto(pics[index].picUrl)
                               .then((bool done) {
-                            showToast(done ? "save succeed" : "save failed",
+                            showToast(done ? 'save succeed' : 'save failed',
                                 position:
                                     ToastPosition(align: Alignment.topCenter));
                           });
@@ -563,10 +563,10 @@ class ImageDetail extends StatelessWidget {
               ExtendedText(
                 content,
                 onSpecialTextTap: (dynamic parameter) {
-                  if (parameter.startsWith("\$")) {
-                    launch("https://github.com/fluttercandies");
-                  } else if (parameter.startsWith("@")) {
-                    launch("mailto:zmtzawqlp@live.com");
+                  if (parameter.startsWith('\$')) {
+                    launch('https://github.com/fluttercandies');
+                  } else if (parameter.startsWith('@')) {
+                    launch('mailto:zmtzawqlp@live.com');
                   }
                 },
                 specialTextSpanBuilder: MySpecialTextSpanBuilder(),
@@ -579,14 +579,14 @@ class ImageDetail extends StatelessWidget {
                         children: <TextSpan>[
                           TextSpan(text: '  \u2026  '),
                           TextSpan(
-                              text: "more detail",
+                              text: 'more detail',
                               style: TextStyle(
                                 color: Colors.blue,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   launch(
-                                      "https://github.com/fluttercandies/extended_text");
+                                      'https://github.com/fluttercandies/extended_text');
                                 })
                         ],
                       ),
