@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'dart:ui' as ui show Image;
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui show Image;
 
 import 'package:flutter_candies_demo_library/src/data/tu_chong_source.dart';
 import 'package:flutter_candies_demo_library/src/model/pic_swiper_item.dart';
@@ -13,33 +13,34 @@ import 'package:flutter_candies_demo_library/src/utils/screen_util.dart';
 ///
 
 class CropImage extends StatelessWidget {
-  final TuChongItem tuChongItem;
-  final bool knowImageSize;
-  final int index;
-  CropImage({
+  const CropImage({
     @required this.index,
     @required this.tuChongItem,
     this.knowImageSize,
   });
-
+  final TuChongItem tuChongItem;
+  final bool knowImageSize;
+  final int index;
   @override
   Widget build(BuildContext context) {
-    if (!tuChongItem.hasImage) return Container();
+    if (!tuChongItem.hasImage) {
+      return Container();
+    }
 
-    final  num300 = ScreenUtil.instance.setWidth(300);
-    final  num400 = ScreenUtil.instance.setWidth(400);
-    var height = num300;
-    var width = num400;
-    final imageItem = tuChongItem.images[index];
+    final double num300 = ScreenUtil.instance.setWidth(300);
+    final double num400 = ScreenUtil.instance.setWidth(400);
+    double height = num300;
+    double width = num400;
+    final ImageItem imageItem = tuChongItem.images[index];
     if (knowImageSize) {
       height = imageItem.height.toDouble();
       width = imageItem.width.toDouble();
-      var n = height / width;
+      final double n = height / width;
       if (n >= 4 / 3) {
         width = num300;
         height = num400;
       } else if (4 / 3 > n && n > 3 / 4) {
-        var maxValue = max(width, height);
+        final double maxValue = max(width, height);
         height = num400 * height / maxValue;
         width = num400 * width / maxValue;
       } else if (n <= 3 / 4) {
@@ -66,7 +67,7 @@ class CropImage extends StatelessWidget {
             child: CircularProgressIndicator(
               strokeWidth: 2.0,
               valueColor:
-                  AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
             ),
           );
           break;
@@ -96,7 +97,7 @@ class CropImage extends StatelessWidget {
                   'assets/failed.jpg',
                   fit: BoxFit.fill,
                 ),
-                Positioned(
+                const Positioned(
                   bottom: 0.0,
                   left: 0.0,
                   right: 0.0,
@@ -122,7 +123,7 @@ class CropImage extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 '+${tuChongItem.images.length - 9}',
-                style: TextStyle(fontSize: 18.0, color: Colors.white),
+                style: const TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             )
           ],
@@ -133,11 +134,11 @@ class CropImage extends StatelessWidget {
         child: widget,
         onTap: () {
           Navigator.pushNamed(context, 'fluttercandies://picswiper',
-              arguments: {
+              arguments: <String, dynamic>{
                 'index': index,
                 'pics': tuChongItem.images
-                    .map<PicSwiperItem>(
-                        (f) => PicSwiperItem(picUrl: f.imageUrl, des: f.title))
+                    .map<PicSwiperItem>((ImageItem f) =>
+                        PicSwiperItem(picUrl: f.imageUrl, des: f.title))
                     .toList(),
                 'tuChongItem': tuChongItem,
               });
@@ -149,7 +150,7 @@ class CropImage extends StatelessWidget {
   }
 
   Widget buildImage(ui.Image image, double num300, double num400) {
-    var n = image.height / image.width;
+    final double n = image.height / image.width;
     if (tuChongItem.images.length == 1) {
       return ExtendedRawImage(image: image, fit: BoxFit.cover);
     } else if (n >= 4 / 3) {
@@ -177,7 +178,7 @@ class CropImage extends StatelessWidget {
                 bottom: 0.0,
                 right: 0.0,
                 child: Container(
-                  padding: EdgeInsets.all(2.0),
+                  padding: const EdgeInsets.all(2.0),
                   color: Colors.grey,
                   child: const Text(
                     'long image',
@@ -191,9 +192,9 @@ class CropImage extends StatelessWidget {
       }
       return imageWidget;
     } else if (4 / 3 > n && n > 3 / 4) {
-      var maxValue = max(image.width, image.height);
-      var height = num400 * image.height / maxValue;
-      var width = num400 * image.width / maxValue;
+      final int maxValue = max(image.width, image.height);
+      final double height = num400 * image.height / maxValue;
+      final double width = num400 * image.width / maxValue;
       return ExtendedRawImage(
         height: height,
         width: width,
@@ -201,7 +202,7 @@ class CropImage extends StatelessWidget {
         fit: BoxFit.fill,
       );
     } else if (n <= 3 / 4) {
-      var width = 4 * image.height / 3;
+      final double width = 4 * image.height / 3;
       Widget imageWidget = ExtendedRawImage(
         image: image,
         width: num400,
@@ -228,7 +229,7 @@ class CropImage extends StatelessWidget {
                 bottom: 0.0,
                 right: 0.0,
                 child: Container(
-                  padding: EdgeInsets.all(2.0),
+                  padding: const EdgeInsets.all(2.0),
                   color: Colors.grey,
                   child: const Text(
                     'long image',

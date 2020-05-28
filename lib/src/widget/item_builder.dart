@@ -14,7 +14,7 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
         Positioned(
           child: kIsWeb
               ? ListView.builder(
-                  itemBuilder: (c, index) {
+                  itemBuilder: (BuildContext c, int index) {
                     return ExtendedImage.network(
                       item.images[index].imageUrl,
                       fit: BoxFit.cover,
@@ -42,7 +42,7 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
           right: 0.0,
           bottom: 0.0,
           child: Container(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             height: 40.0,
             color: Colors.grey.withOpacity(0.5),
             alignment: Alignment.center,
@@ -67,7 +67,8 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
                   isLiked: item.isFavorite,
                   likeCount: item.favorites,
                   countBuilder: (int count, bool isLiked, String text) {
-                    var color = isLiked ? Colors.pinkAccent : Colors.grey;
+                    final ColorSwatch<int> color =
+                        isLiked ? Colors.pinkAccent : Colors.grey;
                     Widget result;
                     if (count == 0) {
                       result = Text(
@@ -102,7 +103,7 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
 
 Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
     {bool konwSized = true}) {
-  final fontSize = 12.0;
+  const double fontSize = 12.0;
 
   Widget image = Stack(
     children: <Widget>[
@@ -111,17 +112,18 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
         shape: BoxShape.rectangle,
         clearMemoryCacheWhenDispose: true,
         border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10.0),
         ),
-        loadStateChanged: (value) {
+        loadStateChanged: (ExtendedImageState value) {
           if (value.extendedImageLoadState == LoadState.loading) {
             Widget loadingWidget = Container(
               alignment: Alignment.center,
               color: Colors.grey.withOpacity(0.8),
               child: CircularProgressIndicator(
                 strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation(Theme.of(c).primaryColor),
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Theme.of(c).primaryColor),
               ),
             );
             if (!konwSized) {
@@ -144,11 +146,11 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
         top: 5.0,
         right: 5.0,
         child: Container(
-          padding: EdgeInsets.all(3.0),
+          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             color: Colors.grey.withOpacity(0.6),
             border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(5.0),
             ),
           ),
@@ -177,11 +179,11 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       image,
-      SizedBox(
+      const SizedBox(
         height: 5.0,
       ),
       buildTagsWidget(item),
-      SizedBox(
+      const SizedBox(
         height: 5.0,
       ),
       buildBottomWidget(item),
@@ -193,18 +195,18 @@ Widget buildTagsWidget(
   TuChongItem item, {
   int maxNum = 6,
 }) {
-  final fontSize = 12.0;
+  const double fontSize = 12.0;
   return Wrap(
       runSpacing: 5.0,
       spacing: 5.0,
-      children: item.tags.take(maxNum).map<Widget>((tag) {
-        final color = item.tagColors[item.tags.indexOf(tag)];
+      children: item.tags.take(maxNum).map<Widget>((String tag) {
+        final Color color = item.tagColors[item.tags.indexOf(tag)];
         return Container(
-          padding: EdgeInsets.all(3.0),
+          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             color: color,
             border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(5.0),
             ),
           ),
@@ -222,29 +224,27 @@ Widget buildTagsWidget(
 }
 
 Widget buildBottomWidget(TuChongItem item, {bool showAvatar = true}) {
-  final fontSize = 12.0;
+  const double fontSize = 12.0;
   return Row(
     children: <Widget>[
-      showAvatar
-          ? ExtendedImage.network(
-              item.avatarUrl,
-              width: 25.0,
-              height: 25.0,
-              shape: BoxShape.circle,
-              //enableLoadState: false,
-              border:
-                  Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
-              loadStateChanged: (state) {
-                if (state.extendedImageLoadState == LoadState.completed) {
-                  return null;
-                }
-                return Image.asset(
-                  'assets/avatar.jpg',
-                  package: 'flutter_candies_demo_library',
-                );
-              },
-            )
-          : Container(),
+      if (showAvatar)
+        ExtendedImage.network(
+          item.avatarUrl,
+          width: 25.0,
+          height: 25.0,
+          shape: BoxShape.circle,
+          //enableLoadState: false,
+          border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
+          loadStateChanged: (ExtendedImageState state) {
+            if (state.extendedImageLoadState == LoadState.completed) {
+              return null;
+            }
+            return Image.asset(
+              'assets/avatar.jpg',
+              package: 'flutter_candies_demo_library',
+            );
+          },
+        ),
       Expanded(
         child: Container(),
       ),
@@ -255,7 +255,7 @@ Widget buildBottomWidget(TuChongItem item, {bool showAvatar = true}) {
             color: Colors.amberAccent,
             size: 18.0,
           ),
-          SizedBox(
+          const SizedBox(
             width: 3.0,
           ),
           Text(
@@ -264,7 +264,7 @@ Widget buildBottomWidget(TuChongItem item, {bool showAvatar = true}) {
           )
         ],
       ),
-      SizedBox(
+      const SizedBox(
         width: 3.0,
       ),
       LikeButton(
@@ -272,7 +272,7 @@ Widget buildBottomWidget(TuChongItem item, {bool showAvatar = true}) {
         isLiked: item.isFavorite,
         likeCount: item.favorites,
         countBuilder: (int count, bool isLiked, String text) {
-          var color = isLiked ? Colors.pinkAccent : Colors.grey;
+          final ColorSwatch<int> color = isLiked ? Colors.pinkAccent : Colors.grey;
           Widget result;
           if (count == 0) {
             result = Text(

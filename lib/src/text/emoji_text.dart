@@ -4,21 +4,20 @@ import 'package:flutter/material.dart';
 
 ///emoji/image text
 class EmojiText extends SpecialText {
-  static const String flag = '[';
-  final int start;
   EmojiText(TextStyle textStyle, {this.start})
       : super(EmojiText.flag, ']', textStyle);
-
+  static const String flag = '[';
+  final int start;
   @override
   InlineSpan finishText() {
-    var key = toString();
+    final String key = toString();
 
     ///https://github.com/flutter/flutter/issues/42086
     /// widget span is not working on web
     if (EmojiUitl.instance.emojiMap.containsKey(key) && !kIsWeb) {
       //fontsize id define image height
       //size = 30.0/26.0 * fontSize
-      final size = 20.0;
+      const double size = 20.0;
 
       ///fontSize 26 and text height =30.0
       //final double fontSize = 26.0;
@@ -32,7 +31,7 @@ class EmojiText extends SpecialText {
           imageHeight: size,
           start: start,
           fit: BoxFit.fill,
-          margin: EdgeInsets.only(left: 2.0, top: 2.0, right: 2.0));
+          margin: const EdgeInsets.only(left: 2.0, top: 2.0, right: 2.0));
     }
 
     return TextSpan(text: toString(), style: textStyle);
@@ -40,6 +39,11 @@ class EmojiText extends SpecialText {
 }
 
 class EmojiUitl {
+  EmojiUitl._() {
+    _emojiMap['[love]'] = '$_emojiFilePath/love.png';
+    _emojiMap['[sun_glasses]'] = '$_emojiFilePath/sun_glasses.png';
+  }
+
   final Map<String, String> _emojiMap = <String, String>{};
 
   Map<String, String> get emojiMap => _emojiMap;
@@ -48,9 +52,4 @@ class EmojiUitl {
 
   static EmojiUitl _instance;
   static EmojiUitl get instance => _instance ??= EmojiUitl._();
-
-  EmojiUitl._() {
-    _emojiMap['[love]'] = '$_emojiFilePath/love.png';
-    _emojiMap['[sun_glasses]'] = '$_emojiFilePath/sun_glasses.png';
-  }
 }

@@ -42,7 +42,7 @@ packages:
       name: collection
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.14.11"
+    version: "1.14.12"
   convert:
     dependency: transitive
     description:
@@ -144,13 +144,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.4"
-  image_picker_saver:
-    dependency: "direct main"
-    description:
-      name: image_picker_saver
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.0"
   intl:
     dependency: "direct main"
     description:
@@ -256,6 +249,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.9.0"
+  photo_manager:
+    dependency: "direct main"
+    description:
+      name: photo_manager
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.2"
   platform:
     dependency: transitive
     description:

@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import '../../flutter_candies_demo_library.dart';
 import 'crop_image.dart';
-import 'package:flutter_candies_demo_library/flutter_candies_demo_library.dart';
 
 const int maxPicGridViewCount = 9;
 
 /// Grid view to show picture
 class PicGridView extends StatelessWidget {
-  final TuChongItem tuChongItem;
-  PicGridView({
+  const PicGridView({
     @required this.tuChongItem,
   });
+  final TuChongItem tuChongItem;
   @override
   Widget build(BuildContext context) {
-    if (!tuChongItem.hasImage) return Container();
+    if (!tuChongItem.hasImage) {
+      return Container();
+    }
 
-    Widget widget = LayoutBuilder(builder: (c, b) {
-      final margin = ScreenUtil.instance.setWidth(22);
-      var size = b.maxWidth;
-      var rowCount = 3;
+    Widget widget = LayoutBuilder(builder: (BuildContext c, BoxConstraints b) {
+      final double margin = ScreenUtil.instance.setWidth(22);
+      final double size = b.maxWidth;
+      int rowCount = 3;
       //single image
       if (tuChongItem.images.length == 1) {
         return Padding(
@@ -30,7 +32,7 @@ class PicGridView extends StatelessWidget {
         );
       }
 
-      var totalWidth = size;
+      double totalWidth = size;
       if (tuChongItem.images.length == 4) {
         totalWidth = size / 3 * 2;
         rowCount = 2;
@@ -44,16 +46,17 @@ class PicGridView extends StatelessWidget {
               crossAxisCount: rowCount,
               crossAxisSpacing: 2.0,
               mainAxisSpacing: 2.0),
-          itemBuilder: (s, index) {
+          itemBuilder: (BuildContext s, int index) {
             return CropImage(
               index: index,
               tuChongItem: tuChongItem,
               knowImageSize: true,
             );
           },
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: tuChongItem.images.length.clamp(1, maxPicGridViewCount),
-          padding: EdgeInsets.all(0.0),
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount:
+              tuChongItem.images.length.clamp(1, maxPicGridViewCount) as int,
+          padding: const EdgeInsets.all(0.0),
         ),
       );
     });

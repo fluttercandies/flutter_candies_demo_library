@@ -5,7 +5,7 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -17,7 +17,8 @@ dependencies:
   extended_text: any
   like_button: any
   
-  image_picker_saver: 0.3.0
+  #image_picker_saver: 0.3.0
+  photo_manager: any
   url_launcher: 5.3.0
   intl: ^0.15.7
   oktoast: ^2.1.4

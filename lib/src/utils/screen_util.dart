@@ -12,26 +12,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class ScreenUtil {
-  static ScreenUtil get instance => _instance;
-  static ScreenUtil _instance;
-
-  //设计稿的设备尺寸修改
-  double width;
-  double height;
-  bool allowFontScaling;
-  double maxPhysicalSize;
-
-  double get _screenWidth => min(window.physicalSize.width, maxPhysicalSize);
-  double get _screenHeight => window.physicalSize.height;
-  double get _pixelRatio => window.devicePixelRatio;
-  double get _statusBarHeight =>
-      EdgeInsets.fromWindowPadding(window.padding, window.devicePixelRatio).top;
-
-  double get _bottomBarHeight =>
-      EdgeInsets.fromWindowPadding(window.padding, window.devicePixelRatio)
-          .bottom;
-
-  double get _textScaleFactor => window.textScaleFactor;
+  
 
   ScreenUtil._({
     this.width = 1080,
@@ -54,6 +35,27 @@ class ScreenUtil {
       maxPhysicalSize: maxPhysicalSize,
     );
   }
+
+  static ScreenUtil get instance => _instance;
+  static ScreenUtil _instance;
+
+  //设计稿的设备尺寸修改
+  double width;
+  double height;
+  bool allowFontScaling;
+  double maxPhysicalSize;
+
+  double get _screenWidth => min(window.physicalSize.width, maxPhysicalSize);
+  double get _screenHeight => window.physicalSize.height;
+  double get _pixelRatio => window.devicePixelRatio;
+  double get _statusBarHeight =>
+      EdgeInsets.fromWindowPadding(window.padding, window.devicePixelRatio).top;
+
+  double get _bottomBarHeight =>
+      EdgeInsets.fromWindowPadding(window.padding, window.devicePixelRatio)
+          .bottom;
+
+  double get _textScaleFactor => window.textScaleFactor;
 
   static MediaQueryData get mediaQueryData => MediaQueryData.fromWindow(window);
 

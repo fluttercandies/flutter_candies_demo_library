@@ -1,8 +1,9 @@
+import 'dart:math' as math;
 import 'package:extended_text_library/extended_text_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' as math;
+
 
 // Minimal padding from all edges of the selection toolbar to all edges of the
 // viewport.
@@ -32,22 +33,22 @@ class MyExtendedMaterialTextSelectionControls
 
     // The toolbar should appear below the TextField
     // when there is not enough space above the TextField to show it.
-    final startTextSelectionPoint = endpoints[0];
-    final endTextSelectionPoint = (endpoints.length > 1) ? endpoints[1] : null;
-    final x = (endTextSelectionPoint == null)
+    final TextSelectionPoint startTextSelectionPoint = endpoints[0];
+    final TextSelectionPoint endTextSelectionPoint = (endpoints.length > 1) ? endpoints[1] : null;
+    final double x = (endTextSelectionPoint == null)
         ? startTextSelectionPoint.point.dx
         : (startTextSelectionPoint.point.dx + endTextSelectionPoint.point.dx) /
             2.0;
-    final availableHeight = globalEditableRegion.top -
+    final double availableHeight = globalEditableRegion.top -
         MediaQuery.of(context).padding.top -
         _kToolbarScreenPadding;
-    final y = (availableHeight < _kToolbarHeight)
+    final double y = (availableHeight < _kToolbarHeight)
         ? startTextSelectionPoint.point.dy +
             globalEditableRegion.height +
             _kToolbarHeight +
             _kToolbarScreenPadding
         : startTextSelectionPoint.point.dy - textLineHeight * 2.0;
-    final preciseMidpoint = Offset(x, y);
+    final Offset preciseMidpoint = Offset(x, y);
 
     return ConstrainedBox(
       constraints: BoxConstraints.tight(globalEditableRegion.size),
@@ -131,8 +132,8 @@ class _TextSelectionToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = <Widget>[];
-    final localizations = MaterialLocalizations.of(context);
+    final List<Widget> items = <Widget>[];
+    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
 
     if (handleCut != null) {
       items.add(FlatButton(
@@ -166,7 +167,7 @@ class _TextSelectionToolbar extends StatelessWidget {
     return Material(
       elevation: 1.0,
       child: Wrap(children: items),
-      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
     );
   }
 }

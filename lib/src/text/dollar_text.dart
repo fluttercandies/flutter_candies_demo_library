@@ -3,15 +3,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class DollarText extends SpecialText {
-  static const String flag = '\$';
-  final int start;
   DollarText(TextStyle textStyle, SpecialTextGestureTapCallback onTap,
       {this.start})
       : super(flag, flag, textStyle, onTap: onTap);
-
+  static const String flag = '\$';
+  final int start;
   @override
   InlineSpan finishText() {
-    final text = getContent();
+    final String text = getContent();
 
     return SpecialTextSpan(
         text: text,
@@ -23,7 +22,9 @@ class DollarText extends SpecialText {
         style: textStyle?.copyWith(color: Colors.orange),
         recognizer: TapGestureRecognizer()
           ..onTap = () {
-            if (onTap != null) onTap(toString());
+            if (onTap != null) {
+              onTap(toString());
+            }
           });
   }
 }

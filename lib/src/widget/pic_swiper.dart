@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 import 'package:extended_image/extended_image.dart';
 import 'package:extended_text/extended_text.dart';
+// ignore: implementation_imports
+import 'package:extended_text/src/selection/extended_text_selection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_candies_demo_library/src/data/tu_chong_source.dart';
@@ -10,7 +13,6 @@ import 'package:flutter_candies_demo_library/src/text/my_extended_text_selection
 import 'package:flutter_candies_demo_library/src/text/my_special_text_span_builder.dart';
 import 'package:flutter_candies_demo_library/src/utils/util.dart';
 import 'package:oktoast/oktoast.dart';
-import 'dart:ui';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,35 +22,39 @@ import 'item_builder.dart';
 const String attachContent =
     '''[love]Extended text help you to build rich text quickly. any special text you will have with extended text.It's my pleasure to invite you to join \$FlutterCandies\$ if you want to improve flutter .[love] if you meet any problem, please let me konw @zmtzawqlp .[sun_glasses]''';
 
+typedef DoubleClickAnimationListener = void Function();
+
 @FFRoute(
     name: 'fluttercandies://picswiper',
     routeName: 'PicSwiper',
-    argumentNames: ['index', 'pics', 'tuChongItem'],
+    argumentNames: <String>['index', 'pics', 'tuChongItem'],
     showStatusBar: false,
     pageRouteType: PageRouteType.transparent)
 class PicSwiper extends StatefulWidget {
-  final int index;
-  final List<PicSwiperItem> pics;
-  final TuChongItem tuChongItem;
-  PicSwiper({
+  const PicSwiper({
     this.index,
     this.pics,
     this.tuChongItem,
   });
+  final int index;
+  final List<PicSwiperItem> pics;
+  final TuChongItem tuChongItem;
   @override
   _PicSwiperState createState() => _PicSwiperState();
 }
 
 class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
-  final rebuildIndex = StreamController<int>.broadcast();
-  final rebuildSwiper = StreamController<bool>.broadcast();
-  final rebuildDetail = StreamController<double>.broadcast();
-  final detailKeys = <int, ImageDetailInfo>{};
+  final StreamController<int> rebuildIndex = StreamController<int>.broadcast();
+  final StreamController<bool> rebuildSwiper =
+      StreamController<bool>.broadcast();
+  final StreamController<double> rebuildDetail =
+      StreamController<double>.broadcast();
+  final Map<int, ImageDetailInfo> detailKeys = <int, ImageDetailInfo>{};
   AnimationController _doubleClickAnimationController;
   AnimationController _slideEndAnimationController;
   Animation<double> _slideEndAnimation;
   Animation<double> _doubleClickAnimation;
-  Function _doubleClickAnimationListener;
+  DoubleClickAnimationListener _doubleClickAnimationListener;
   List<double> doubleTapScales = <double>[1.0, 2.0];
   GlobalKey<ExtendedImageSlidePageState> slidePagekey =
       GlobalKey<ExtendedImageSlidePageState>();
@@ -91,7 +97,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     imageDRect = Offset.zero & size;
     Widget result = Material(
 
@@ -107,7 +113,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                 initialPage: widget.index,
               ),
               itemBuilder: (BuildContext context, int index) {
-                var item = widget.pics[index].picUrl;
+                final String item = widget.pics[index].picUrl;
 
                 Widget image = ExtendedImage.network(
                   item,
@@ -125,9 +131,9 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                             BuildContext fromHeroContext,
                             BuildContext toHeroContext) {
                           final Hero hero =
-                              flightDirection == HeroFlightDirection.pop
+                              (flightDirection == HeroFlightDirection.pop
                                   ? fromHeroContext.widget
-                                  : toHeroContext.widget;
+                                  : toHeroContext.widget) as Hero;
                           return hero.child;
                         },
                       );
@@ -135,8 +141,8 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                       return result;
                     }
                   },
-                  initGestureConfigHandler: (state) {
-                    var initialScale = 1.0;
+                  initGestureConfigHandler: (ExtendedImageState state) {
+                    double initialScale = 1.0;
 
                     if (state.extendedImageInfo != null &&
                         state.extendedImageInfo.image != null) {
@@ -160,8 +166,9 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                   onDoubleTap: (ExtendedImageGestureState state) {
                     ///you can use define pointerDownPosition as you can,
                     ///default value is double tap pointer down postion.
-                    final pointerDownPosition = state.pointerDownPosition;
-                    var begin = state.gestureDetails.totalScale;
+                    final Offset pointerDownPosition =
+                        state.pointerDownPosition;
+                    final double begin = state.gestureDetails.totalScale;
                     double end;
 
                     //remove old
@@ -194,9 +201,9 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
 
                     _doubleClickAnimationController.forward();
                   },
-                  loadStateChanged: (state) {
+                  loadStateChanged: (ExtendedImageState state) {
                     if (state.extendedImageLoadState == LoadState.completed) {
-                      final imageDRect = getDestinationRect(
+                      final Rect imageDRect = getDestinationRect(
                         rect: Offset.zero & size,
                         inputSize: Size(
                           state.extendedImageInfo.image.width.toDouble(),
@@ -210,13 +217,14 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                         pageSize: size,
                         imageInfo: state.extendedImageInfo,
                       );
-                      final imageDetailInfo = detailKeys[index];
-                      return StreamBuilder(
-                        builder: (context, data) {
+                      final ImageDetailInfo imageDetailInfo = detailKeys[index];
+                      return StreamBuilder<double>(
+                        builder:
+                            (BuildContext context, AsyncSnapshot<double> data) {
                           return ExtendedImageGesture(
                             state,
                             canScaleImage: (_) => _imageDetailY == 0,
-                            imageBuilder: (image) {
+                            imageBuilder: (Widget image) {
                               return Stack(
                                 children: <Widget>[
                                   Positioned.fill(
@@ -287,7 +295,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                 rebuildSwiper.add(_showSwiper);
               },
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
 //              //move page only when scale is not more than 1.0
               // canMovePage: (GestureDetails gestureDetails) {
               //   //gestureDetails.totalScale <= 1.0
@@ -297,8 +305,10 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
               //physics: ClampingScrollPhysics(),
             ),
             StreamBuilder<bool>(
-              builder: (c, d) {
-                if (d.data == null || !d.data) return Container();
+              builder: (BuildContext c, AsyncSnapshot<bool> d) {
+                if (d.data == null || !d.data) {
+                  return Container();
+                }
 
                 return Positioned(
                   top: 0.0,
@@ -379,19 +389,19 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
         if (_imageDetailY != 0 && state.scale == 1) {
           if (!_slideEndAnimationController.isAnimating) {
 // get magnitude from gesture velocity
-            final magnitude = details.velocity.pixelsPerSecond.distance;
+            final double magnitude = details.velocity.pixelsPerSecond.distance;
 
             // do a significant magnitude
 
             if (doubleCompare(magnitude, minMagnitude) >= 0) {
-              final direction =
+              final Offset direction =
                   details.velocity.pixelsPerSecond / magnitude * 1000;
 
               _slideEndAnimation =
                   _slideEndAnimationController.drive(Tween<double>(
                 begin: _imageDetailY,
-                end: (_imageDetailY + direction.dy)
-                    .clamp(-detailKeys[_currentIndex].maxImageDetailY, 0.0),
+                end: (_imageDetailY + direction.dy).clamp(
+                    -detailKeys[_currentIndex].maxImageDetailY, 0.0) as double,
               ));
               _slideEndAnimationController.reset();
               _slideEndAnimationController.forward();
@@ -402,11 +412,11 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
 
         return null;
       },
-      onSlidingPage: (state) {
+      onSlidingPage: (ExtendedImageSlidePageState state) {
         ///you can change other widgets' state on page as you want
         ///base on offset/isSliding etc
         //var offset= state.offset;
-        var showSwiper = !state.isSliding;
+        final bool showSwiper = !state.isSliding;
         if (showSwiper != _showSwiper) {
           // do not setState directly here, the image state will change,
           // you should only notify the widgets which are needed to change
@@ -425,14 +435,14 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
 }
 
 class MySwiperPlugin extends StatelessWidget {
+  const MySwiperPlugin(this.pics, this.index, this.reBuild);
   final List<PicSwiperItem> pics;
   final int index;
   final StreamController<int> reBuild;
-  MySwiperPlugin(this.pics, this.index, this.reBuild);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<int>(
-      builder: (BuildContext context, data) {
+      builder: (BuildContext context, AsyncSnapshot<int> data) {
         return DefaultTextStyle(
           style: TextStyle(color: Colors.blue),
           child: Container(
@@ -450,7 +460,7 @@ class MySwiperPlugin extends StatelessWidget {
                 Text(
                   ' / ${pics.length}',
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10.0,
                 ),
                 Expanded(
@@ -458,30 +468,28 @@ class MySwiperPlugin extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 16.0, color: Colors.blue))),
-                SizedBox(
+                const SizedBox(
                   width: 10.0,
                 ),
-                !kIsWeb
-                    ? GestureDetector(
-                        child: Container(
-                          padding: EdgeInsets.only(right: 10.0),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Save',
-                            style:
-                                TextStyle(fontSize: 16.0, color: Colors.blue),
-                          ),
-                        ),
-                        onTap: () {
-                          saveNetworkImageToPhoto(pics[index].picUrl)
-                              .then((bool done) {
-                            showToast(done ? 'save succeed' : 'save failed',
-                                position:
-                                    ToastPosition(align: Alignment.topCenter));
-                          });
-                        },
-                      )
-                    : Container(),
+                if (!kIsWeb)
+                  GestureDetector(
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Save',
+                        style: TextStyle(fontSize: 16.0, color: Colors.blue),
+                      ),
+                    ),
+                    onTap: () {
+                      saveNetworkImageToPhoto(pics[index].picUrl)
+                          .then((bool done) {
+                        showToast(done ? 'save succeed' : 'save failed',
+                            position:
+                                ToastPosition(align: Alignment.topCenter));
+                      });
+                    },
+                  ),
               ],
             ),
           ),
@@ -500,7 +508,7 @@ class ImageDetailInfo {
     @required this.imageInfo,
   });
 
-  final key = GlobalKey<State>();
+  final GlobalKey<State<StatefulWidget>> key = GlobalKey<State>();
 
   final Rect imageDRect;
 
@@ -515,7 +523,7 @@ class ImageDetailInfo {
     try {
       //
       return _maxImageDetailY ??= max(
-          (key.currentContext.size.height - (pageSize.height - imageBottom)),
+          key.currentContext.size.height - (pageSize.height - imageBottom),
           0.1);
     } catch (e) {
       //currentContext is not ready
@@ -525,27 +533,27 @@ class ImageDetailInfo {
 }
 
 class ImageDetail extends StatelessWidget {
-  final ImageDetailInfo info;
-  final int index;
-  final TuChongItem tuChongItem;
-  ImageDetail(
+  const ImageDetail(
     this.info,
     this.index,
     this.tuChongItem,
   );
+  final ImageDetailInfo info;
+  final int index;
+  final TuChongItem tuChongItem;
   @override
   Widget build(BuildContext context) {
-    var content =
+    String content =
         tuChongItem.content ?? (tuChongItem.excerpt ?? tuChongItem.title);
     content += attachContent * 2;
-    Widget result = Container(
+    final Widget result = Container(
       // constraints: BoxConstraints(minHeight: 25.0),
       key: info.key,
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: 5,
         right: 5,
       ),
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       child: Stack(
         overflow: Overflow.visible,
         children: <Widget>[
@@ -557,15 +565,15 @@ class ImageDetail extends StatelessWidget {
                 tuChongItem,
                 maxNum: tuChongItem.tags.length,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15.0,
               ),
               ExtendedText(
                 content,
                 onSpecialTextTap: (dynamic parameter) {
-                  if (parameter.startsWith('\$')) {
+                  if (parameter.toString().startsWith('\$')) {
                     launch('https://github.com/fluttercandies');
-                  } else if (parameter.startsWith('@')) {
+                  } else if (parameter.toString().startsWith('@')) {
                     launch('mailto:zmtzawqlp@live.com');
                   }
                 },
@@ -577,7 +585,7 @@ class ImageDetail extends StatelessWidget {
                     ? null
                     : OverFlowTextSpan(
                         children: <TextSpan>[
-                          TextSpan(text: '  \u2026  '),
+                          const TextSpan(text: '  \u2026  '),
                           TextSpan(
                               text: 'more detail',
                               style: TextStyle(
@@ -594,11 +602,11 @@ class ImageDetail extends StatelessWidget {
                 textSelectionControls:
                     MyExtendedMaterialTextSelectionControls(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20.0,
               ),
-              Divider(height: 1),
-              SizedBox(
+              const Divider(height: 1),
+              const SizedBox(
                 height: 20.0,
               ),
               buildBottomWidget(
@@ -655,14 +663,14 @@ class ImageDetail extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
           border: Border.all(
             color: Colors.grey,
           ),
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(color: Colors.grey, blurRadius: 15.0, spreadRadius: 20.0),
           ]),
     );
@@ -671,7 +679,7 @@ class ImageDetail extends StatelessWidget {
       //default behavior
       // child: result,
       //custom your behavior
-      builder: (states) {
+      builder: (List<ExtendedTextSelectionState> states) {
         return GestureDetector(
           onTap: () {
             //do not pop page
@@ -679,17 +687,17 @@ class ImageDetail extends StatelessWidget {
           child: Listener(
             child: result,
             behavior: HitTestBehavior.translucent,
-            onPointerDown: (value) {
-              for (var state in states) {
+            onPointerDown: (PointerDownEvent value) {
+              for (final ExtendedTextSelectionState state in states) {
                 if (!state.containsPosition(value.position)) {
                   //clear other selection
                   state.clearSelection();
                 }
               }
             },
-            onPointerMove: (value) {
+            onPointerMove: (PointerMoveEvent value) {
               //clear other selection
-              for (var state in states) {
+              for (final ExtendedTextSelectionState state in states) {
                 state.clearSelection();
               }
             },
@@ -701,24 +709,23 @@ class ImageDetail extends StatelessWidget {
 }
 
 class FloatText extends StatelessWidget {
-  FloatText(this.text);
+  const FloatText(this.text);
   final String text;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(3.0),
       decoration: BoxDecoration(
         color: Colors.red.withOpacity(0.6),
         border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1.0),
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(5.0),
         ),
       ),
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }
