@@ -1,3 +1,4 @@
-## [0.1.0] - TODO: Add release date.
+## [1.0.0]
 
-* TODO: Describe initial release.
+* Merge code from 1.17.0
+* Fix analysis_options

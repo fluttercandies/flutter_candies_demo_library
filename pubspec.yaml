@@ -1,11 +1,12 @@
 name: flutter_candies_demo_library
 description:  package library for demo of flutter candies, it provides core classes.
-version: 0.1.0
-author:
-homepage:
+version: 1.0.0
+author: zmtzawqlp <zmtzawqlp@live.com>
+homepage: https://github.com/fluttercandies/flutter_candies_demo_library
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
@@ -14,7 +15,7 @@ dependencies:
   http_client_helper: any  
   extended_image: any  
   pull_to_refresh_notification: any
-  extended_text: any
+  extended_text: ^1.0.0
   like_button: any
   
   #image_picker_saver: 0.3.0
@@ -22,7 +23,6 @@ dependencies:
   url_launcher: 5.3.0
   intl: ^0.15.7
   oktoast: ^2.1.4
-
 dev_dependencies:
   ff_annotation_route: any
 # For information on the generic Dart part of this file, see the

@@ -7,11 +7,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Minimal padding from all edges of the selection toolbar to all edges of the
 // viewport.
-
+const double _kHandleSize = 22.0;
 const double _kToolbarScreenPadding = 8.0;
 const double _kToolbarHeight = 44.0;
-const double _kHandleSize = 22.0;
-
+// Padding when positioning toolbar below selection.
+const double _kToolbarContentDistanceBelow = _kHandleSize - 2.0;
+const double _kToolbarContentDistance = 8.0;
 ///
 ///  create by zmtzawqlp on 2019/8/3
 ///
@@ -24,41 +25,44 @@ class MyExtendedMaterialTextSelectionControls
     BuildContext context,
     Rect globalEditableRegion,
     double textLineHeight,
-    Offset position,
+    Offset selectionMidpoint,
     List<TextSelectionPoint> endpoints,
     TextSelectionDelegate delegate,
   ) {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasMaterialLocalizations(context));
 
-    // The toolbar should appear below the TextField
-    // when there is not enough space above the TextField to show it.
+    // The toolbar should appear below the TextField when there is not enough
+    // space above the TextField to show it.
     final TextSelectionPoint startTextSelectionPoint = endpoints[0];
-    final TextSelectionPoint endTextSelectionPoint = (endpoints.length > 1) ? endpoints[1] : null;
-    final double x = (endTextSelectionPoint == null)
-        ? startTextSelectionPoint.point.dx
-        : (startTextSelectionPoint.point.dx + endTextSelectionPoint.point.dx) /
-            2.0;
-    final double availableHeight = globalEditableRegion.top -
-        MediaQuery.of(context).padding.top -
-        _kToolbarScreenPadding;
-    final double y = (availableHeight < _kToolbarHeight)
-        ? startTextSelectionPoint.point.dy +
-            globalEditableRegion.height +
-            _kToolbarHeight +
-            _kToolbarScreenPadding
-        : startTextSelectionPoint.point.dy - textLineHeight * 2.0;
-    final Offset preciseMidpoint = Offset(x, y);
+    final TextSelectionPoint endTextSelectionPoint = endpoints.length > 1
+      ? endpoints[1]
+      : endpoints[0];
+    const double closedToolbarHeightNeeded = _kToolbarScreenPadding
+      + _kToolbarHeight
+      + _kToolbarContentDistance;
+    final double paddingTop = MediaQuery.of(context).padding.top;
+    final double availableHeight = globalEditableRegion.top
+      + startTextSelectionPoint.point.dy
+      - textLineHeight
+      - paddingTop;
+    final bool fitsAbove = closedToolbarHeightNeeded <= availableHeight;
+    final Offset anchor = Offset(
+      globalEditableRegion.left + selectionMidpoint.dx,
+      fitsAbove
+        ? globalEditableRegion.top + startTextSelectionPoint.point.dy - textLineHeight - _kToolbarContentDistance
+        : globalEditableRegion.top + endTextSelectionPoint.point.dy + _kToolbarContentDistanceBelow,
+    );
 
-    return ConstrainedBox(
-      constraints: BoxConstraints.tight(globalEditableRegion.size),
-      child: CustomSingleChildLayout(
-        delegate: ExtendedMaterialTextSelectionToolbarLayout(
-          MediaQuery.of(context).size,
-          globalEditableRegion,
-          preciseMidpoint,
-        ),
-        child: _TextSelectionToolbar(
+    return Stack(
+      children: <Widget>[
+        CustomSingleChildLayout(
+          delegate: ExtendedMaterialTextSelectionToolbarLayout(
+            anchor,
+            _kToolbarScreenPadding + paddingTop,
+            fitsAbove,
+          ),
+          child: _TextSelectionToolbar(
           handleCut: canCut(delegate) ? () => handleCut(delegate) : null,
           handleCopy: canCopy(delegate) ? () => handleCopy(delegate) : null,
           handlePaste: canPaste(delegate) ? () => handlePaste(delegate) : null,
@@ -74,8 +78,9 @@ class MyExtendedMaterialTextSelectionControls
                 selection: TextSelection.collapsed(
                     offset: delegate.textEditingValue.selection.end));
           },
+    ),
         ),
-      ),
+      ],
     );
   }
 
