@@ -22,7 +22,9 @@ class TuChongRepository extends LoadingMoreBase<TuChongItem> {
   bool _hasMore = true;
   bool forceRefresh = false;
   @override
-  bool get hasMore => (_hasMore && length < 300) || forceRefresh;
+  bool get hasMore => (_hasMore && length < maxLength) || forceRefresh;
+  final int maxLength;
+  TuChongRepository({this.maxLength = 300});
 
   @override
   Future<bool> refresh([bool notifyStateChanged = false]) async {
