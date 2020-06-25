@@ -58,7 +58,7 @@ Widget itemBuilder(BuildContext context, TuChongItem item, int index) {
                     ),
                     Text(
                       item.comments.toString(),
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     )
                   ],
                 ),
@@ -157,7 +157,7 @@ Widget buildWaterfallFlowItem(BuildContext c, TuChongItem item, int index,
           child: Text(
             '${index + 1}',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: fontSize, color: Colors.white),
+            style: const TextStyle(fontSize: fontSize, color: Colors.white),
           ),
         ),
       )

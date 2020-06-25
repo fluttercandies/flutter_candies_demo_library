@@ -581,22 +581,25 @@ class ImageDetail extends StatelessWidget {
                 //overflow: ExtendedTextOverflow.ellipsis,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
                 maxLines: 10,
-                overFlowTextSpan: kIsWeb
+                overFlowWidget: kIsWeb
                     ? null
-                    : OverFlowTextSpan(
-                        children: <TextSpan>[
-                          const TextSpan(text: '  \u2026  '),
-                          TextSpan(
-                              text: 'more detail',
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launch(
-                                      'https://github.com/fluttercandies/extended_text');
-                                })
-                        ],
+                    : TextOverflowWidget(
+                        //maxHeight: double.infinity,
+                        //align: TextOverflowAlign.right,
+                        //fixedOffset: Offset.zero,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Text('\u2026 '),
+                            RaisedButton(
+                              child: const Text('more'),
+                              onPressed: () {
+                                launch(
+                                    'https://github.com/fluttercandies/extended_text');
+                              },
+                            )
+                          ],
+                        ),
                       ),
                 selectionEnabled: true,
                 textSelectionControls:

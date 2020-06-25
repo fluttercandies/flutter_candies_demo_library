@@ -27,8 +27,7 @@ export 'package:flutter_candies_demo_library/src/widget/item_builder.dart';
 export 'package:loading_more_list_library/loading_more_list_library.dart';
 export 'package:http_client_helper/http_client_helper.dart';
 export 'package:extended_image/extended_image.dart';
-export 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart'
-    hide CircularProgressIndicator;
+export 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 export 'package:extended_text_library/extended_text_library.dart';
 export 'package:like_button/like_button.dart';
 
