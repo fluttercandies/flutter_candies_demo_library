@@ -18,16 +18,19 @@ Future<bool> onLikeButtonTap(bool isLiked, TuChongItem item) {
 }
 
 class TuChongRepository extends LoadingMoreBase<TuChongItem> {
-  int pageindex = 1;
+  TuChongRepository({this.maxLength = 300});
+  int _pageIndex = 1;
   bool _hasMore = true;
   bool forceRefresh = false;
   @override
-  bool get hasMore => (_hasMore && length < 300) || forceRefresh;
+  bool get hasMore => (_hasMore && length < maxLength) || forceRefresh;
+  final int maxLength;
+
 
   @override
   Future<bool> refresh([bool notifyStateChanged = false]) async {
     _hasMore = true;
-    pageindex = 1;
+    _pageIndex = 1;
     //force to refresh list when you don't want clear list before request
     //for the case, if your list already has 20 items.
     forceRefresh = !notifyStateChanged;
@@ -44,7 +47,7 @@ class TuChongRepository extends LoadingMoreBase<TuChongItem> {
     } else {
       final int lastPostId = this[length - 1].postId;
       url =
-          'https://api.tuchong.com/feed-app?post_id=$lastPostId&page=$pageindex&type=loadmore';
+          'https://api.tuchong.com/feed-app?post_id=$lastPostId&page=$_pageIndex&type=loadmore';
     }
     bool isSuccess = false;
     try {
@@ -60,7 +63,7 @@ class TuChongRepository extends LoadingMoreBase<TuChongItem> {
         feedList = mockSource.feedList.getRange(length, length + 20).toList();
       }
 
-      if (pageindex == 1) {
+      if (_pageIndex == 1) {
         clear();
       }
 
@@ -71,7 +74,7 @@ class TuChongRepository extends LoadingMoreBase<TuChongItem> {
       }
 
       _hasMore = feedList.isNotEmpty;
-      pageindex++;
+      _pageIndex++;
 //      this.clear();
 //      _hasMore=false;
       isSuccess = true;
