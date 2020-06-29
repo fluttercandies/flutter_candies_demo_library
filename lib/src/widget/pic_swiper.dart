@@ -581,7 +581,7 @@ class ImageDetail extends StatelessWidget {
                 //overflow: ExtendedTextOverflow.ellipsis,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
                 maxLines: 10,
-                overFlowWidget: kIsWeb
+                overflowWidget: kIsWeb
                     ? null
                     : TextOverflowWidget(
                         //maxHeight: double.infinity,
